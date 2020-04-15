@@ -3,7 +3,14 @@
  */
 package com.mark;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Collections;
+import java.util.HashSet;
+
 import com.mark.controller.WordProcessor;
+
 
 /**
  * @author mkulu
@@ -29,30 +36,64 @@ public class Main {
 		
 		boolean allLettersGuessed = false;
 		
-		String word = "FACEBOOK";
+		String secretWord = "JAVA";
+		int lenSecretWord = secretWord.length();
+		
+		String currentGuess = String.join("", Collections.nCopies(lenSecretWord, "_ ")); //String.repeat("_"., secretWord.length());
+		currentGuess = currentGuess.trim();
+		HashSet<String> guessedChars = new HashSet<String>();
+		
+		System.out.println("***WELCOME TO HANGMANG***");
+		System.out.println("");
+		System.out.println("You are allowed 3 incorrect guesses");
 		
 		while(numGuesses < 3  && !allLettersGuessed) {
-			
-			System.out.println("***WELCOME TO HANGMANG***");
-			System.out.println("You are allowed 3 incorrect character guesses");
-			System.out.println("Enter an alphabet character to guess the word");
-			System.out.println();
-			
+
+			System.out.println("Incorrect guesses = " + numGuesses);
+			System.out.println("Characters guessed: " + currentGuess);
+			System.out.println("Enter an alpha character to guess the word");
 			
 			
 			// Accept user input
-			String userIn = "";
-			// Input validation check if input is single alpha letter
-			boolean inputValid = wordProcessor.inputValidation(userIn);
-			
-			if(wordProcessor.checkGuess(word, "F")) {
-				System.out.println("The character exists");
+			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+			String userGuess = "";
+			try {
+				userGuess = br.readLine();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 			
-			numGuesses += 1;
-			break;
+			// Input validation check if input is single alpha letter
+			boolean inputValid = wordProcessor.inputValidation(userGuess);
 			
-
+			if(wordProcessor.checkGuess(secretWord, userGuess)) {
+				System.out.println("Correct Guess - '"+userGuess+"' is in the secrect word");
+				
+				guessedChars.add(userGuess);
+				
+				currentGuess = wordProcessor.fillBlanks(secretWord, currentGuess, guessedChars);
+				allLettersGuessed = wordProcessor.allGuessedFinished( secretWord, currentGuess);
+				
+			} else {
+				System.out.println("Incorrect Guess - '"+userGuess+"' is not in the secrect word");
+				numGuesses += 1;
+				
+			}
+			
+			System.out.println("\n##################################################\n");
+			
+			if(allLettersGuessed) {
+				System.out.println("****You Win****");
+				System.out.println("The Secret Word Is: "+currentGuess);
+				System.out.println("****Game Over****");
+			} else if(numGuesses >= 3) {
+				System.out.println("****You Lose****");
+				System.out.println("Too Many Incorrect Guesses: "+ numGuesses);
+				System.out.println("Try Again");
+				System.out.println("****Game Over****");
+			}
+			
 		}
 		
 	}
