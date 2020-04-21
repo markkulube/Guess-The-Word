@@ -1,11 +1,13 @@
 package com.mark.controller;
 
 import java.util.HashSet;
+import java.util.regex.Pattern;
 
 public class WordProcessor {
 	
 	public boolean checkGuess(String word, CharSequence guessedChar) {
 		System.out.println("Checking the guessed character: " + guessedChar);
+	
 		return word.contains(guessedChar);
 	}
 	
@@ -24,8 +26,16 @@ public class WordProcessor {
 	}
 	
 	public boolean inputValidation(CharSequence userIn) {
-		System.out.println("User input validated");
-		return true;
+		//System.out.println("User input validated");
+		Boolean singleChar = userIn.length()==1;
+		Boolean isLetter= false;
+		if(singleChar) {
+			isLetter = Pattern.matches("[a-zA-Z]", userIn);
+		} else {
+			System.out.println("Please guess a single letter");
+		}
+		
+		return (singleChar && isLetter);
 	}
 	
 	public String fillBlanks(String secretWord, String currentGuess, HashSet guessedChars) {
