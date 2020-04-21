@@ -67,12 +67,8 @@ public class App {
 				
 				printMessages.correctGuessMessage(charValidCorrect, userGuess);
 				
-				if(charValidCorrect) {
-					
-
-					
+				if(charValidCorrect) {		
 					guessedChars.add(userGuess);
-					
 					currentGuess = wordProcessor.fillBlanks(secretWord, currentGuess, guessedChars);
 					allLettersGuessed = wordProcessor.allGuessedFinished( secretWord, currentGuess);
 					
@@ -93,11 +89,7 @@ public class App {
 				//e.printStackTrace();
 				
 				System.out.println("There was an error, try again!");
-			}
-
-			
-		}
-		
+			}		
+		}		
 	}
-
 }
