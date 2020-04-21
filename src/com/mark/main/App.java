@@ -1,7 +1,8 @@
 /**
  * 
  */
-package com.mark;
+package com.mark.main;
+
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,6 +11,9 @@ import java.util.Collections;
 import java.util.HashSet;
 
 import com.mark.controller.WordProcessor;
+import com.mark.view.HangmanCanvas;
+
+import acm.program.ConsoleProgram;
 
 
 /**
@@ -17,6 +21,8 @@ import com.mark.controller.WordProcessor;
  *
  */
 public class App {
+	
+	private static HangmanCanvas canvas;
 
 	/**
 	 * @param args
@@ -24,9 +30,14 @@ public class App {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
+		init();
 		start();
 
 	}
+	 public static void init() {
+		 canvas = new HangmanCanvas();
+		 ConsoleProgram.add(canvas);
+	 }
 	
 	public static void start( ) {
 		
