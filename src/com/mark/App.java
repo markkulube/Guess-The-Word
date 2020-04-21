@@ -16,7 +16,7 @@ import com.mark.controller.WordProcessor;
  * @author mkulu
  *
  */
-public class Main {
+public class App {
 
 	/**
 	 * @param args
@@ -49,7 +49,7 @@ public class Main {
 		
 		while(numGuesses < 3  && !allLettersGuessed) {
 
-			System.out.println("Incorrect guesses = " + numGuesses);
+			System.out.println("Incorrect guesses = " + numGuesses + "/3");
 			System.out.println("Characters guessed: " + currentGuess);
 			System.out.println("Enter an alpha character to guess the word");
 			
@@ -64,10 +64,14 @@ public class Main {
 				e.printStackTrace();
 			}
 			
+			// 		
+			secretWord = secretWord.toLowerCase();
+			userGuess = userGuess.toString().toLowerCase();
+			
 			// Input validation check if input is single alpha letter
 			boolean inputValid = wordProcessor.inputValidation(userGuess);
 			
-			if(wordProcessor.checkGuess(secretWord, userGuess)) {
+			if(inputValid && wordProcessor.checkGuess(secretWord, userGuess)) {
 				System.out.println("Correct Guess - '"+userGuess+"' is in the secrect word");
 				
 				guessedChars.add(userGuess);
@@ -89,7 +93,7 @@ public class Main {
 				System.out.println("****Game Over****");
 			} else if(numGuesses >= 3) {
 				System.out.println("****You Lose****");
-				System.out.println("Too Many Incorrect Guesses: "+ numGuesses);
+				System.out.println("Too Many Incorrect Guesses: "+ numGuesses+ "/3");
 				System.out.println("Try Again");
 				System.out.println("****Game Over****");
 			}
