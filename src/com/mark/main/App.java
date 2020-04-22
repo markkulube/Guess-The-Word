@@ -15,42 +15,59 @@ import com.mark.view.PrintMessages;
 
 
 /**
- * @author mkulu
+ * The main class that start the program as well as the game.
+ * 
+ * @author Mark Kulube
+ * @email markkulube@gmail.com
  *
  */
 public class App {
 
 	/**
+	 * Main method
+	 * 
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		
 		PrintMessages printMessages = new PrintMessages();
-		start(printMessages);
-
-	}
-
-	public static void start(PrintMessages printMessages ) {
-		
 		WordProcessor wordProcessor = new WordProcessor();
-		int maxGuesses = 3;
+		
+		String fileName = "src\\WordList.txt";
+		try {
+			String secretWord = wordProcessor.generateSecretWord(fileName).trim().toUpperCase();
+			start_game(secretWord, printMessages, wordProcessor);
+		} catch (Exception e) {
+
+			System.out.println("There is an error with src\\WordList.txt. The game will not run.");
+			// e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 
+	 * @param secretWord
+	 * @param printMessages
+	 * @param wordProcessor
+	 */
+	public static void start_game(String secretWord, PrintMessages printMessages, WordProcessor wordProcessor) {
+		
+		int maxGuesses = (int) Math.ceil((secretWord.length() * 1.5));
 		int numGuesses = 0;
 		
 		boolean allLettersGuessed = false;
 		
-		String secretWord = "JAVA";
 		int lenSecretWord = secretWord.length();
 		
 		String currentGuess = String.join("", Collections.nCopies(lenSecretWord, "_ ")); //String.repeat("_"., secretWord.length());
 		currentGuess = currentGuess.trim();
 		HashSet<String> guessedChars = new HashSet<String>();
 		
-		printMessages.welcome();
+		printMessages.welcome(maxGuesses);
 		
-		while(numGuesses < 3  && !allLettersGuessed) {
+		while(numGuesses < maxGuesses  && !allLettersGuessed) {
 			
-			printMessages.guessInstruction(numGuesses, currentGuess);
+			printMessages.guessInstruction(numGuesses, maxGuesses, currentGuess);
 			
 			// Accept user input
 			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -59,11 +76,10 @@ public class App {
 				userGuess = br.readLine();
 				
 				// Make sure the character and secrectWord have the same capitalization.
-				secretWord = secretWord.toUpperCase();
 				userGuess = userGuess.toString().toUpperCase();
 				
 				// Input validation check if input is single alpha letter
-				boolean charValidCorrect = wordProcessor.inputValidation(userGuess)  && wordProcessor.checkGuess(secretWord, userGuess);
+				boolean charValidCorrect = wordProcessor.inputValidation(userGuess) && wordProcessor.checkGuess(secretWord, userGuess);
 				
 				printMessages.correctGuessMessage(charValidCorrect, userGuess);
 				
@@ -81,8 +97,8 @@ public class App {
 				
 				if(allLettersGuessed) {
 					printMessages.winMessage(currentGuess);
-				} else if(numGuesses >= 3) {
-					printMessages.loseMessage(numGuesses);
+				} else if(numGuesses >= maxGuesses) {
+					printMessages.loseMessage(secretWord, numGuesses, maxGuesses);
 				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
